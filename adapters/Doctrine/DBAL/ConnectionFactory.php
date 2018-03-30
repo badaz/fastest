@@ -44,6 +44,20 @@ class ConnectionFactory extends BaseConnectionFactory
                     $slave['path'] = str_replace('__DBNAME__', $dbName, $slave['path']);
                 }
             }
+        } elseif ('pdo_mysql' === $params['driver']) {
+            if (isset($params['dbname'])) {
+                $params['dbname'] = str_replace('__DBNAME__', $dbName, $params['dbname']);
+            }
+
+            if (isset($params['master']['dbname'])) {
+                $params['master']['dbname'] = str_replace('__DBNAME__', $dbName, $params['master']['dbname']);
+            }
+
+            if (!empty($params['slaves'])) {
+                foreach ($params['slaves'] as &$slave) {
+                    $slave['dbname'] = str_replace('__DBNAME__', $dbName, $slave['dbname']);
+                }
+            }
         } else {
             $params['dbname'] = $dbName;
         }
